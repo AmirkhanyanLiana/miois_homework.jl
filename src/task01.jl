@@ -22,21 +22,16 @@ function touppercase(str_)
 end
 
 function firstnorm(vec_::AbstractVector{<:Number})
-
     n1=0
-
-    for n in vector
-        n1+=n
+    for n in vec_
+        n1+=abs(vec_)
     end
-    return n1
-
+    return n1 
 end
 
 function secondnorm(vec_::AbstractVector{<:Number})
-    vector1 = vector .^2
-
     n2=0
-    for n in vector
+    for n in vec_
         n2+=n^2
     end
 
@@ -44,24 +39,22 @@ function secondnorm(vec_::AbstractVector{<:Number})
 end
 
 function infnorm(vec_::AbstractVector{<:Number})
-    n3 = maximum(vector)
-    m,n = 999, 999
-    A=Array{Int32}(undef, m, n)
-    for j in 1:n
-        for i in 1:m
-            A[i,j] = i + j
+    n3 = 0;
+    for n in vec_
+        if n > n3
+            n3 = n
         end
     end
-    return A
+    return n3
 end
 
 function firstnorm(vec_::AbstractMatrix{<:Number})
     sum1 = 0
-    rows, cols = size(A)
+    rows, cols = size(vec_)
     vecsum1 = Array{Any}(undef, 1, cols)
     for j = 1:cols
         for i = 1:rows
-            sum1+= A[i,j]
+            sum1+= vec_[i,j]
         end
         vecsum1[j]=sum1
         sum1=0
@@ -78,17 +71,17 @@ end
 
 function infnorm(vec_::AbstractMatrix{<:Number})
     nA3 = 0
-    rows, cols = size(A)
+    rows, cols = size(vec_)
     for i = 1:rows
         for j = 1:cols
-            A[i,j] = (A[i,j])^2
+            vec_[i,j] = (vec_[i,j])^2
         end
     end
-    A
+    vec_
     sum3=0
     for i = 1:rows
         for j = 1:cols
-           sum3+=A[i,j]
+           sum3+=vec_[i,j]
         end
     end
     return (sum3)^(1/2)
