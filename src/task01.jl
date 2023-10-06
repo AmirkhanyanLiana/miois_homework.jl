@@ -24,7 +24,7 @@ end
 function firstnorm(vec_::AbstractVector{<:Number})
     n1=0
     for n in vec_
-        n1+=abs(vec_)
+        n1+=abs(n)
     end
     return n1 
 end
@@ -48,43 +48,28 @@ function infnorm(vec_::AbstractVector{<:Number})
     return n3
 end
 
-function firstnorm(vec_::AbstractMatrix{<:Number})
-    sum1 = 0
-    rows, cols = size(vec_)
-    vecsum1 = Array{Any}(undef, 1, cols)
-    for j = 1:cols
-        for i = 1:rows
-            sum1+= vec_[i,j]
+function firstnorm(mat_::AbstractMatrix{<:Number})
+    v = 0;
+    for col in eachcol(mat_)
+        b = 0
+        for x in col
+            b += x;
         end
-        vecsum1[j]=sum1
-        sum1=0
+        v = v < b ? b : v;
     end
-    vecsum1
-    nA1=0
-    for n in vecsum1
-        if n>nA1
-            nA1=n
-        end
-    end
-    return nA1
+    return v
 end
 
-function infnorm(vec_::AbstractMatrix{<:Number})
-    nA3 = 0
-    rows, cols = size(vec_)
-    for i = 1:rows
-        for j = 1:cols
-            vec_[i,j] = (vec_[i,j])^2
+function infnorm(mat_::AbstractMatrix{<:Number})
+    v = 0;
+    for col in eachrow(mat_)
+        b = 0
+        for x in col
+            b+=x;
         end
+        v = v < b ? b : v;
     end
-    vec_
-    sum3=0
-    for i = 1:rows
-        for j = 1:cols
-           sum3+=vec_[i,j]
-        end
-    end
-    return (sum3)^(1/2)
+    return v
 end
 
 function isleap(year)
@@ -98,14 +83,14 @@ function isleap(year)
 end
 
 function chesscolor(cell1, cell2)
-    a = (cell1[1] - 'a')+ 1;
+    a = cell1[1] - 'a'+ 1;
     b = cell1[2]
 
-    c = (cell2[1] - 'a') + 1;
+    c = cell2[1] - 'a' + 1;
     d = cell2[2];
     if ((a+b+c+d) % 2) == 0
-        return "yes"
+        return true
     else
-        return "no"
+        return false
     end
 end
